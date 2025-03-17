@@ -8,6 +8,10 @@
 SRC     =   src/start.c    \
             src/init_data.c 	\
 			src/check_type.c	\
+			src/df_info.c	\
+			src/df_shape.c	\
+			src/df_describe.c	\
+			src/fill_row.c
 
 OBJ     =   $(SRC:.c=.o)
 
@@ -16,7 +20,7 @@ NAME    =   libcuddle.a
 CC      =   gcc
 
 IFLAGS  =   -Iinclude/
-CFLAGS  =   -Wall -Wextra -g3 $(IFLAGS)
+CFLAGS  =   -Wall -Wextra -g3 $(IFLAGS) -lm
 
 LIBMY   =   lib/my/libmy.a
 

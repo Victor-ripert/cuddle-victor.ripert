@@ -38,9 +38,11 @@ void add_row_to_dataframe(dataframe_t *df, char *line,
 
     token = strtok(line, separator);
     for (int i = 0; i < df->nb_columns && token; i++) {
-        row[i] = strdup(token);
-        if (df->nb_rows == 0)
+        // row[i] = strdup(token);  was here before
+        if (df->nb_rows == 0) {
             df->column_types[i] = detect_type(token);
+        }
+        row[i] = fill_row(token, df->column_types[i]);
         token = strtok(NULL, separator);
     }
     for (int i = 0; i < df->nb_columns; i++) {

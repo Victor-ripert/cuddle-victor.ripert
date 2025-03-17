@@ -13,11 +13,11 @@
     #include <string.h>
 
 typedef enum {
-    BOOL,
-    INT,
-    UINT,
-    FLOAT,
-    STRING,
+    BOOL = 0,
+    INT = 1,
+    UINT = 2,
+    FLOAT = 3,
+    STRING = 4,
     UNDEFINED
 } column_type_t;
 
@@ -29,6 +29,18 @@ typedef struct {
     void ***data;
 } dataframe_t;
 
+typedef struct type_to_str_s {
+    column_type_t type;
+    char *name;
+} type_to_str_t;
+
+typedef struct dataframe_shape_s {
+    int nb_rows;
+    int nb_columns;
+} dataframe_shape_t;
+
+dataframe_shape_t df_shape(dataframe_t *dataframe);
+
 dataframe_t *initialize_dataframe_from_file(FILE *file,
     const char *separator);
 dataframe_t *init_dataframe(int nb_columns, char **column_names);
@@ -38,5 +50,8 @@ dataframe_t *df_read_csv(const char *filename, const char *separator);
 void add_row_to_dataframe(dataframe_t *df, char *line,
     const char *separator);
 column_type_t detect_type(const char *str);
+void df_info(dataframe_t *dataframe);
+void df_describe(dataframe_t *dataframe);
+void *fill_row(char *row, column_type_t type);
 
 #endif /* DATAFRAME_H */
