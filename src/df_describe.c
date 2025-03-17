@@ -4,96 +4,94 @@
 ** File description:
 ** df_describe.c
 */
-#include "dataframe.h"
-#include <math.h>
 
-int is_num_type(column_type_t type) {
-    if (type == INT)
-        return 0;
-    if (type == UINT)
-        return 0;
-    if (type == FLOAT)
-        return 0;
-    return 84;
+#include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include "dataframe.h"
+
+int is_num_type(column_type_t type)
+{
+    return (type == INT || type == UINT || type == FLOAT);
+}
+
+static float round_to_centime(float value)
+{
+    return roundf(value * 100) / 100;
 }
 
 static float find_mean(dataframe_t *dataframe, int pos_column)
 {
     float mean = 0;
-    float *tmp = NULL;
 
-    for (int i = 0; i < dataframe->nb_rows; i++) {
-        tmp = (float *)dataframe->data[i][pos_column];
-        mean += (*tmp);
-    }
-    mean = mean / dataframe->nb_rows;
-    return mean;
+    for (int i = 0; i < dataframe->nb_rows; i++)
+        mean += atof((char *)dataframe->data[pos_column][i]);
+    mean /= dataframe->nb_rows;
+    return round_to_centime(mean);
 }
 
 static float find_stddev(dataframe_t *dataframe, int pos_column, float mean)
 {
     float stddev = 0;
-    float *tmp = NULL;
+    float val = 0;
 
     for (int i = 0; i < dataframe->nb_rows; i++) {
-        tmp = (float *)dataframe->data[i][pos_column];
-        stddev += pow(((*tmp) - mean), 2);
+        val = atof((char *)dataframe->data[pos_column][i]);
+        stddev += pow(val - mean, 2);
     }
-    stddev /= dataframe->nb_rows;
-    stddev = sqrt(stddev);
-    return stddev;
+    stddev = sqrt(stddev / dataframe->nb_rows);
+    return round_to_centime(stddev);
 }
 
 static float find_max(dataframe_t *dataframe, int pos_column)
 {
-    float *tmp = (float *)dataframe->data[pos_column][0];
-    float max = tmp[0];
-    for (int i = 0; i < dataframe->nb_rows; i++) {
-        tmp = (float *)dataframe->data[pos_column][i];
-        if (tmp[0] > max)
-            max = tmp[0];
+    float max = atof((char *)dataframe->data[pos_column][0]);
+    float val = 0;
+
+    for (int i = 1; i < dataframe->nb_rows; i++) {
+        val = atof((char *)dataframe->data[pos_column][i]);
+        if (val > max)
+            max = val;
     }
-    return max;
+    return round_to_centime(max);
 }
 
 static float find_min(dataframe_t *dataframe, int pos_column)
 {
-    float *tmp = (float *)dataframe->data[1][pos_column];
-    float min = (*tmp);
+    float min = atof((char *)dataframe->data[pos_column][0]);
+    float val = 0;
 
-    for (int i = 0; i < dataframe->nb_rows; i++) {
-        tmp = (float *)dataframe->data[pos_column][i];
-        if ((*tmp) < min)
-            min = (*tmp);
+    for (int i = 1; i < dataframe->nb_rows; i++) {
+        val = atof((char *)dataframe->data[pos_column][i]);
+        if (val < min)
+            min = val;
     }
-    return min;
+    return round_to_centime(min);
 }
 
-int describe_loop(dataframe_t *dataframe, int pos_column)
+void describe_loop(dataframe_t *dataframe, int pos_column)
 {
     float mean = 0;
     float stddev = 0;
     float min = 0;
     float max = 0;
 
-    if (is_num_type(dataframe->column_types[pos_column])!= 0)
-        return 84;
+    if (!is_num_type(dataframe->column_types[pos_column]))
+        return;
     mean = find_mean(dataframe, pos_column);
     stddev = find_stddev(dataframe, pos_column, mean);
     min = find_min(dataframe, pos_column);
     max = find_max(dataframe, pos_column);
-    printf("Name: %s\n", dataframe->column_names[pos_column]);
+    printf("Column: %s\n", dataframe->column_names[pos_column]);
     printf("Count: %d\n", dataframe->nb_rows);
-    printf("Mean: %f\n", mean);
-    printf("Std: %f\n", stddev);
-    printf("Min: %f\n", min);
-    printf("Max: %f\n", max);
+    printf("Mean: %.2f\n", mean);
+    printf("Std: %.2f\n", stddev);
+    printf("Min: %.2f\n", min);
+    printf("Max: %.2f\n", max);
 }
 
 void df_describe(dataframe_t *dataframe)
 {
-    for (int i = 0; i < dataframe->nb_columns; i++) {
+    for (int i = 0; i < dataframe->nb_columns; i++)
         describe_loop(dataframe, i);
-    }
-    return 0;
 }

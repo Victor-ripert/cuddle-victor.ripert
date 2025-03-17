@@ -50,8 +50,8 @@ dataframe_t *df_read_csv(const char *filename, const char *separator);
 void add_row_to_dataframe(dataframe_t *df, char *line,
     const char *separator);
 column_type_t detect_type(const char *str);
-void df_info(dataframe_t *dataframe);
-void df_describe(dataframe_t *dataframe);
-void *fill_row(char *row, column_type_t type);
+int df_write_csv(dataframe_t *dataframe, const char *filename);
+column_type_t detect_column_type(dataframe_t *dataframe, int col);
+void describe_loop(dataframe_t *dataframe, int pos_column);
 
 #endif /* DATAFRAME_H */

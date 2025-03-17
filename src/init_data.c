@@ -30,19 +30,16 @@ static char **get_column_names(char *line, const char *separator,
     return column_names;
 }
 
-void add_row_to_dataframe(dataframe_t *df, char *line,
-    const char *separator)
+void add_row_to_dataframe(dataframe_t *df, char *line, const char *separator)
 {
     char *token;
     void **row = malloc(sizeof(void *) * df->nb_columns);
 
+    if (!row)
+        return;
     token = strtok(line, separator);
     for (int i = 0; i < df->nb_columns && token; i++) {
-        // row[i] = strdup(token);  was here before
-        if (df->nb_rows == 0) {
-            df->column_types[i] = detect_type(token);
-        }
-        row[i] = fill_row(token, df->column_types[i]);
+        row[i] = strdup(token);
         token = strtok(NULL, separator);
     }
     for (int i = 0; i < df->nb_columns; i++) {
@@ -50,6 +47,9 @@ void add_row_to_dataframe(dataframe_t *df, char *line,
         df->data[i][df->nb_rows] = row[i];
     }
     df->nb_rows++;
+    free(row);
+    for (int i = 0; i < df->nb_columns; i++)
+        df->column_types[i] = detect_column_type(df, i);
 }
 
 dataframe_t *initialize_dataframe_from_file(FILE *file,

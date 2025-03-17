@@ -8,10 +8,9 @@
 SRC     =   src/start.c    \
             src/init_data.c 	\
 			src/check_type.c	\
-			src/df_info.c	\
-			src/df_shape.c	\
-			src/df_describe.c	\
-			src/fill_row.c
+			src/df_shape.c    \
+			src/df_info.c     \
+			src/df_describe.c \
 
 OBJ     =   $(SRC:.c=.o)
 

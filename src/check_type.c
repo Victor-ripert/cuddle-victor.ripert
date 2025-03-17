@@ -32,12 +32,10 @@ static int is_valid_float_char(char c, int *dot_count)
 {
     if (c == '.') {
         ++(*dot_count);
-        if ((*dot_count) > 1) {
+        if ((*dot_count) > 1)
             return 0;
-        }
-    } else if (!isdigit(c)) {
+    } else if (!isdigit(c))
         return 0;
-    }
     return 1;
 }
 
@@ -71,8 +69,20 @@ column_type_t detect_type(const char *str)
     return STRING;
 }
 
-void detect_column_types(dataframe_t *df, char **first_row)
+column_type_t detect_column_type(dataframe_t *dataframe, int col)
 {
-    for (int i = 0; i < df->nb_columns; i++)
-        df->column_types[i] = detect_type(first_row[i]);
+    column_type_t type = detect_type((char *)dataframe->data[col][0]);
+    column_type_t current_type = STRING;
+
+    for (int i = 1; i < dataframe->nb_rows; i++) {
+        current_type = detect_type((char *)dataframe->data[col][i]);
+        if (current_type == STRING)
+            return STRING;
+        if ((current_type == FLOAT && type == INT) ||
+            (current_type == FLOAT && type == UINT))
+            type = FLOAT;
+        if (current_type == INT && type == UINT)
+            type = INT;
+    }
+    return type;
 }
