@@ -11,6 +11,7 @@ SRC     =   src/start.c    \
 			src/df_shape.c    \
 			src/df_info.c     \
 			src/df_describe.c \
+			src/df_head_tail.c     \
 
 OBJ     =   $(SRC:.c=.o)
 
