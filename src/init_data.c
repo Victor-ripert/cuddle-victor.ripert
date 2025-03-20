@@ -67,11 +67,12 @@ dataframe_t *initialize_dataframe_from_file(FILE *file,
     column_names = get_column_names(line, separator, nb_columns);
     if (!column_names)
         return NULL;
-    df = init_dataframe(nb_columns, column_names);
+    df = init_dataframe(nb_columns, column_names, separator);
     return df;
 }
 
-dataframe_t *init_dataframe(int nb_columns, char **column_names)
+dataframe_t *init_dataframe(int nb_columns, char **column_names,
+    const char *separator)
 {
     dataframe_t *df = malloc(sizeof(dataframe_t));
 
@@ -82,6 +83,7 @@ dataframe_t *init_dataframe(int nb_columns, char **column_names)
     df->column_names = column_names;
     df->column_types = malloc(sizeof(column_type_t) * nb_columns);
     df->data = malloc(sizeof(void **) * nb_columns);
+    df->separator = strdup(separator);
     if (!df->column_types || !df->data) {
         free(df);
         return NULL;

@@ -24,10 +24,9 @@ dataframe_t *df_head(dataframe_t *dataframe, int nb_rows)
 {
     dataframe_t *new_df = malloc(sizeof(dataframe_t));
 
-    if (!new_df || !dataframe || nb_rows <= 0)
-        return NULL;
     if (nb_rows > dataframe->nb_rows)
         nb_rows = dataframe->nb_rows;
+    new_df->separator = strdup(dataframe->separator);
     new_df->nb_rows = nb_rows;
     new_df->nb_columns = dataframe->nb_columns;
     new_df->column_names = malloc(sizeof(char *) * dataframe->nb_columns);
