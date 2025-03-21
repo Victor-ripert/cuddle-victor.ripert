@@ -49,6 +49,14 @@ typedef struct {
     bool (*filter_func)(void *);
 } filter_context_t;
 
+typedef struct {
+    dataframe_t *dataframe;
+    void **values;
+    const char *column;
+    int col_index;
+    int *unique_count;
+} unique_values_info_t;
+
 dataframe_shape_t df_shape(dataframe_t *dataframe);
 
 dataframe_t *initialize_dataframe_from_file(FILE *file,
@@ -69,5 +77,7 @@ dataframe_t *df_filter(dataframe_t *dataframe, const char *column,
     bool (*filter_func)(void *));
 void df_free(dataframe_t *df);
 void *df_get_value(dataframe_t *dataframe, int row, const char *column);
+void **df_get_values(dataframe_t *dataframe, const char *column);
+void **df_get_unique_values(dataframe_t *dataframe, const char *column);
 
 #endif /* DATAFRAME_H */

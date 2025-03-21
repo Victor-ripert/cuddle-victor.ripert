@@ -14,6 +14,8 @@ SRC     =   src/start.c    \
 			src/df_head_tail.c     \
 			src/df_filter.c    \
 			src/get_value.c    \
+			src/df_get_values.c \
+			src/df_get_unique_values.c \
 
 OBJ     =   $(SRC:.c=.o)
 
