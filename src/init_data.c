@@ -83,7 +83,7 @@ dataframe_t *init_dataframe(int nb_columns, char **column_names,
     df->column_names = column_names;
     df->column_types = malloc(sizeof(column_type_t) * nb_columns);
     df->data = malloc(sizeof(void **) * nb_columns);
-    df->separator = separator; //strdup(separator);
+    df->separator = strdup(separator);
     if (!df->column_types || !df->data) {
         free(df);
         return NULL;

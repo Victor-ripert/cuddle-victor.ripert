@@ -30,6 +30,7 @@ dataframe_t *df_read_csv(const char *filename, const char *separator)
         add_row_to_dataframe(df, line, separator_test);
     }
     fclose(file);
+    free(separator_test);
     return df;
 }
 
@@ -67,7 +68,7 @@ int df_write_csv(dataframe_t *dataframe, const char *filename)
     return 0;
 }
 
-void free_dataframe(dataframe_t *df)
+void df_free(dataframe_t *df)
 {
     for (int i = 0; i < df->nb_columns; i++) {
         for (int j = 0; j < df->nb_rows; j++)

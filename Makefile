@@ -13,6 +13,7 @@ SRC     =   src/start.c    \
 			src/df_describe.c \
 			src/df_head_tail.c     \
 			src/df_filter.c    \
+			src/get_value.c    \
 
 OBJ     =   $(SRC:.c=.o)
 

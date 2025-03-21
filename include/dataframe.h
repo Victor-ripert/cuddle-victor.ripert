@@ -55,7 +55,6 @@ dataframe_t *initialize_dataframe_from_file(FILE *file,
     const char *separator);
 dataframe_t *init_dataframe(int nb_columns, char **column_names,
     const char *separator);
-void free_dataframe(dataframe_t *df);
 void print_dataframe(dataframe_t *df);
 dataframe_t *df_read_csv(const char *filename, const char *separator);
 void add_row_to_dataframe(dataframe_t *df, char *line,
@@ -68,5 +67,7 @@ dataframe_t *df_head(dataframe_t *dataframe, int nb_rows);
 dataframe_t *df_tail(dataframe_t *dataframe, int nb_rows);
 dataframe_t *df_filter(dataframe_t *dataframe, const char *column,
     bool (*filter_func)(void *));
+void df_free(dataframe_t *df);
+void *df_get_value(dataframe_t *dataframe, int row, const char *column);
 
 #endif /* DATAFRAME_H */
