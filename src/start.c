@@ -15,10 +15,9 @@ dataframe_t *df_read_csv(const char *filename, const char *separator)
     FILE *file = fopen(filename, "r");
     char line[MAX_LINE_LENGTH];
     dataframe_t *df;
-    char *separator_test = strdup(separator);
+    char *separator_test = NULL;
 
-    if (separator_test == NULL)
-        separator_test = ",";
+    separator_test = (separator != NULL) ? strdup(separator) : strdup(",");
     if (!file)
         return NULL;
     df = initialize_dataframe_from_file(file, separator_test);
@@ -79,5 +78,6 @@ void free_dataframe(dataframe_t *df)
     free(df->data);
     free(df->column_names);
     free(df->column_types);
+    free(df->separator);
     free(df);
 }
